@@ -140,7 +140,7 @@ export const logOutUsuario = async () => {
   try {
     const respuesta = await signOut(auth)
     console.log(respuesta);
-    console.log('Me sali...!');
+    console.log('Me sali');
   } catch (e) {
     throw new Error(e)
   }

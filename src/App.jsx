@@ -19,7 +19,7 @@ function App() {
     // console.log('Entro');
 
     // const usuario = {
-    //   nombre: 'Pedro',
+    //   nombre: 'santiago',
     //   edad: 30
     // }
 
@@ -37,7 +37,7 @@ function App() {
     // consultarDocumentoDatabase('usuarios', 'CEqaCqjBFnI0SQKRj0tI')
 
     // const usuarioDos = {
-    //   nombre: 'Martha',
+    //   nombre: 'sofia',
     //   edad: 15
     // }
 

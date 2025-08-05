@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { ListaProductos } from './components/ListaProductos';
 import { Producto } from './components/Producto';
+import EditarProducto from './components/EditarProducto';
 
 
 function App() {
@@ -126,26 +127,17 @@ function App() {
       <hr />
 
       <Router>
-
         <Switch>
-
-          {/* <Route to="/productos/:id">
-            <Producto />
-          </Route> */}
-
-          <Route to="/productos">
+          <Route exact path="/">
             <ListaProductos />
           </Route>
-
-          <Route to="/" exact>
-
+          <Route path="/productos" exact>
+            <ListaProductos />
           </Route>
-
-
+          <Route path="/productos/editar/:id">
+            <EditarProducto />
+          </Route>
         </Switch>
-
-
-
       </Router>
 
     </div>

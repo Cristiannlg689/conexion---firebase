@@ -1,83 +1,64 @@
 import React, { useEffect, useState } from 'react'
+import { consultarDatabase, eliminarDocumentoDatabase } from '../config/firebase'
 import { Link } from 'react-router-dom'
-import { consultarDatabase, eliminarDocumentoDatabase } from '../config/firebase';
 
 export const ListaProductos = () => {
-
-  const [listaProductos, setListaProductos] = useState([])
-  const [mensaje, setMensaje] = useState('') // ✅ Mensaje de éxito
+  const [productos, setProductos] = useState([])
 
   useEffect(() => {
-    cargarDatos()
+    cargarProductos()
   }, [])
 
-  const cargarDatos = async () => {
-    const listaTemporal = await consultarDatabase('lista-productos')
-    setListaProductos(listaTemporal)
+  const cargarProductos = async () => {
+    const resultado = await consultarDatabase('lista-productos')
+    setProductos(resultado)
   }
 
-  const eliminarProducto = async (id) => {
-    const confirmar = window.confirm('¿Estás seguro de eliminar este producto?')
+  const handleEliminar = async (id) => {
+    const confirmar = window.confirm('¿Seguro que quieres eliminar este producto?')
     if (!confirmar) return
 
     await eliminarDocumentoDatabase('lista-productos', id)
-    setMensaje('Producto eliminado correctamente ✅')
-
-    // Oculta el mensaje después de 2.5 segundos
-    setTimeout(() => setMensaje(''), 2500)
-
-    cargarDatos()
+    alert('Producto eliminado ✅')
+    cargarProductos()
   }
 
   return (
-    <div>
-      <h3>Lista Productos</h3>
-      <hr />
-
-      {mensaje && (
-        <div className="alert alert-success" role="alert">
-          {mensaje}
-        </div>
-      )}
-
-      <div className="mt-5">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Descripcion</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col">Precio Unitario</th>
-              <th scope="col">Acciones</th>
+    <div className="container mt-4">
+      <h3>Lista de Productos</h3>
+      <table className="table table-bordered table-striped mt-3">
+        <thead className="table-dark">
+          <tr>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productos.map((producto) => (
+            <tr key={producto.id}>
+              <td>{producto.descripcion}</td>
+              <td>{producto.cantidad}</td>
+              <td>${producto.precioUnitario}</td>
+              <td>
+                <Link
+                  to={`/productos/editar/${producto.id}`}
+                  className="btn btn-sm btn-warning me-2"
+                >
+                  Editar
+                </Link>
+                <button
+                  onClick={() => handleEliminar(producto.id)}
+                  className="btn btn-sm btn-danger"
+                >
+                  Eliminar
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {
-              listaProductos.map((producto, index) => (
-                <tr key={producto.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>
-                    <input type="text" value={producto.descripcion} readOnly />
-                  </td>
-                  <td>{producto.cantidad}</td>
-                  <td>{producto.precioUnitario}</td>
-                  <td>
-                    <Link to={`/productos/${producto.id}`}>
-                      <button className="btn btn-info btn-sm me-2">Editar</button>
-                    </Link>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => eliminarProducto(producto.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

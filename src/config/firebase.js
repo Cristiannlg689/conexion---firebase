@@ -22,6 +22,9 @@ const database = getFirestore();
 const auth = getAuth();
 export let usuario;
 
+//CRUD 
+//create, read, update, delete
+
 // Guardar base de datos
 export const guardarDatabase = async (nombreColeccion, data) => {
 
